@@ -66,63 +66,43 @@ class House {
 }
 
 class Department {
-    private final String name;
-    private Employee manager;
-    private final List<Employee> employees = new ArrayList<>();
+    public String name;
+    public Employee manager; // Ссылка на начальника
+    public List<Employee> employees = new ArrayList<>(); // Список всех сотрудников отдела
 
     public Department(String name) {
         this.name = name;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public Employee getManager() {
-        return manager;
-    }
-
-    public void setManager(Employee manager) {
-        this.manager = manager;
-    }
-
-    public void addEmployee(Employee employee) {
-        if (!employees.contains(employee)) {
-            employees.add(employee);
-        }
-    }
-
-    public List<Employee> getEmployees() {
-        return new ArrayList<>(employees); 
-    }
 }
 
 class Employee {
-    private final String name;
-    private final Department department;
+    public String name;
+    public Department department;
 
     public Employee(String name, Department department) {
         this.name = name;
         this.department = department;
-        this.department.addEmployee(this); 
+        
+        // Сразу добавляем себя в список этого отдела при создании
+        this.department.employees.add(this); 
     }
 
+    // Метод для получения коллег из отдела
     public List<Employee> getColleagues() {
-        return department.getEmployees();
+        return department.employees; 
     }
 
     @Override
     public String toString() {
-        if (department.getManager() == this) {
-            return name + " начальник отдела " + department.getName();
-        } else {
-            String managerName = (department.getManager() != null) ? department.getManager().getManagerNameOnly() : "не назначен";
-            return name + " работает в отделе " + department.getName() + ", начальник которого " + managerName;
+        // Если этот сотрудник и есть начальник своего отдела
+        if (department.manager == this) {
+            return name + " начальник отдела " + department.name;
+        } 
+        // Если это обычный сотрудник
+        else {
+            String managerName = (department.manager != null) ? department.manager.name : "не назначен";
+            return name + " работает в отделе " + department.name + ", начальник которого " + managerName;
         }
-    }
-
-    private String getManagerNameOnly() {
-        return this.name;
     }
 }
 
@@ -219,7 +199,7 @@ public class Lab2 {
         Employee kozlov = new Employee("Козлов", itDept);
         Employee sidorov = new Employee("Сидоров", itDept);
 
-        itDept.setManager(kozlov);
+        itDept.manager = kozlov;
 
         System.out.println("Список сотрудников после назначения начальника:");
         System.out.println(petrov);
@@ -232,7 +212,7 @@ public class Lab2 {
         System.out.println("Запрос списка всех сотрудников отдела через ссылку на Петрова:");
         List<Employee> colleagues = petrov.getColleagues();
         for (Employee emp : colleagues) {
-            System.out.println(" - " + emp);
+            System.out.println(" - " + emp.name + " (" + (emp.department.manager == emp ? "Начальник" : "Сотрудник") + ")");
         }
 
         System.out.println("\n");
