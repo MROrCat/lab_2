@@ -67,8 +67,8 @@ class House {
 
 class Department {
     public String name;
-    public Employee manager; // Ссылка на начальника
-    public List<Employee> employees = new ArrayList<>(); // Список всех сотрудников отдела
+    public Employee manager; 
+    public List<Employee> employees = new ArrayList<>(); 
 
     public Department(String name) {
         this.name = name;
@@ -83,22 +83,18 @@ class Employee {
         this.name = name;
         this.department = department;
         
-        // Сразу добавляем себя в список этого отдела при создании
         this.department.employees.add(this); 
     }
 
-    // Метод для получения коллег из отдела
     public List<Employee> getColleagues() {
         return department.employees; 
     }
 
     @Override
     public String toString() {
-        // Если этот сотрудник и есть начальник своего отдела
         if (department.manager == this) {
             return name + " начальник отдела " + department.name;
         } 
-        // Если это обычный сотрудник
         else {
             String managerName = (department.manager != null) ? department.manager.name : "не назначен";
             return name + " работает в отделе " + department.name + ", начальник которого " + managerName;
@@ -107,9 +103,8 @@ class Employee {
 }
 
 class Fraction {
-    private final int numerator;   // Числитель
-    private final int denominator; // Знаменатель
-
+    private final int numerator;   
+    private final int denominator; 
     public Fraction(int numerator, int denominator) {
         if (denominator == 0) {
             throw new IllegalArgumentException("Знаменатель не может быть равен нулю");
